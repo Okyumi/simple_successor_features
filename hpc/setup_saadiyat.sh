@@ -6,7 +6,10 @@ module load cuda/11.8.0
 module load conda-gcc/11.2.0
 eval "$(conda shell.bash hook)"
 SF_CONDA_ENV="${SF_CONDA_ENV:-simple_sfs}"
-conda create -y -n "$SF_CONDA_ENV" python=3.11 pip
+case "$SF_CONDA_ENV" in
+  */*) conda create -y --prefix "$SF_CONDA_ENV" python=3.11 pip ;;
+  *)   conda create -y --name "$SF_CONDA_ENV" python=3.11 pip ;;
+esac
 conda activate "$SF_CONDA_ENV"
 export PYTHONNOUSERSITE=1
 python -m pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu118
