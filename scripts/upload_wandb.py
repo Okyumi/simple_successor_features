@@ -30,7 +30,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('batch', type=Path)
     parser.add_argument('--entity', required=True)
-    parser.add_argument('--project', default='nrc2_successor_features')
+    parser.add_argument('--project', default='Manifold-successor-feature')
     parser.add_argument('--upload', action='store_true', help='Default is preview only')
     args = parser.parse_args()
     runs = sorted((args.batch / 'runs').glob('*/launch.json'))

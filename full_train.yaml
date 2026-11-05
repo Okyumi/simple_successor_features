@@ -55,8 +55,8 @@ single_task_run_backward: false
 env_type: dm_control
 
 wandb_dir: ./wandb
-wandb_project: ${oc.env:WANDB_PROJECT,nrc2_successor_features}
-wandb_entity: ${oc.env:WANDB_ENTITY,null}
+wandb_project: ${oc.env:WANDB_PROJECT,Manifold-successor-feature}
+wandb_entity: ${oc.env:WANDB_ENTITY,nyuad_mmvc}
 wandb_group: ${experiment}
 wandb_mode: ${oc.env:WANDB_MODE,online}
 mode: full_train

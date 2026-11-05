@@ -38,7 +38,7 @@ Compare return AUC and final return across seeds, alongside rank99, feature vari
 
 ## Weights & Biases
 
-New pilot, confirm, transfer, and pixels grids enable W&B; smoke remains off unless you pass `--set use_wandb=true`. Runs share project `nrc2_successor_features`, are grouped by experiment stage, and identify the domain, seed, coefficient, and regularization target. Return and training diagnostics use environment frames as their chart axes; local JSONL and TensorBoard logs remain enabled.
+New pilot, confirm, transfer, and pixels grids enable W&B; smoke remains off unless you pass `--set use_wandb=true`. Runs share project `Manifold-successor-feature`, are grouped by experiment stage, and identify the domain, seed, coefficient, and regularization target. Return and training diagnostics use environment frames as their chart axes; local JSONL and TensorBoard logs remain enabled.
 
 On the login node, activate the environment and authenticate interactively (never put API keys in scripts):
 
@@ -46,8 +46,8 @@ On the login node, activate the environment and authenticate interactively (neve
 export SF_CONDA_ENV="/scratch/$USER/conda-envs/simple_sfs"
 source hpc/environment.sh
 wandb login
-export WANDB_ENTITY="YOUR_WANDB_USERNAME_OR_TEAM"
-export WANDB_PROJECT="nrc2_successor_features"
+export WANDB_ENTITY="nyuad_mmvc"
+export WANDB_PROJECT="Manifold-successor-feature"
 export WANDB_MODE=online
 bash hpc/submit_saadiyat.sh --stage smoke --set use_wandb=true
 # After checking the W&B smoke runs:
@@ -59,7 +59,7 @@ If compute nodes cannot reach W&B, set `WANDB_MODE=offline` before submitting an
 ```bash
 # Preview the saved records first; add --upload to send them to W&B.
 python scripts/upload_wandb.py /scratch/$USER/simple_sf_runs/BATCH_DIRECTORY \
-  --entity YOUR_WANDB_USERNAME_OR_TEAM
+  --entity nyuad_mmvc
 ```
 
 Only import finished batches. Import preserves logged metrics and their frame values, not historical GPU telemetry. Completed imports are marked and skipped on repeat; an interrupted upload fails on retry rather than silently duplicating history. New code does not retroactively change existing manifests.
