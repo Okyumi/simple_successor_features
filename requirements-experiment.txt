@@ -1,0 +1,10 @@
+# Install torch separately for your CPU/CUDA platform. Tested: Python 3.12, torch 2.15 CPU.
+hydra-core==1.3.2
+dm-control
+numpy
+dm-env
+absl-py
+wandb
+termcolor
+tensorboard
+pytest

@@ -1,0 +1,9 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+exp_local/
+exp_sweep/
+full_train/
+wandb/
+outputs/
+multirun/

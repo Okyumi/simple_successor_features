@@ -21,7 +21,7 @@ import uuid
 from logger import Logger
 from replay_buffer import ReplayBufferStorage, make_replay_loader
 
-from video import TrainVideoRecorder, VideoRecorder
+# Video recording is disabled upstream; the referenced video module is absent.
 from collections import OrderedDict
 
 torch.backends.cudnn.benchmark = True

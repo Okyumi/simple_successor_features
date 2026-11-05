@@ -1,3 +1,7 @@
+## NRC2 experiments on Saadiyat HPC
+
+See [EXPERIMENTS.md](EXPERIMENTS.md) for the experiment summary, hyperparameter controls, and setup/submission commands. The original Simple SF implementation and attribution are retained below.
+
 # Learning Successor Features the Simple Way 
 This is the official code for our paper, [Learning Successor Features the Simple Way,](https://arxiv.org/abs/2410.22133) accepted at NeurIPS 2024. 
 

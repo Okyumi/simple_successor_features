@@ -1,10 +1,10 @@
 import csv
+import json
 import datetime
 from collections import defaultdict
 
 import numpy as np
 import torch
-import torchvision
 import wandb
 from termcolor import colored
 from torch.utils.tensorboard import SummaryWriter
@@ -131,7 +131,9 @@ class MetersGroup(object):
         if self.use_wandb:
             wandb_data = {prefix + '/' + key: val for key, val in data.items()}
             self._dump_to_wandb(data=wandb_data)
-        # self._dump_to_csv(data)
+        # JSONL permits diagnostics to appear at different logging intervals.
+        with self._csv_file_name.with_suffix('.jsonl').open('a') as stream:
+            stream.write(json.dumps(data) + '\n')
         self._dump_to_console(data, prefix)
         self._meters.clear()
 
