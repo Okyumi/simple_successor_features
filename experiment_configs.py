@@ -21,7 +21,8 @@ def build_runs(stage='pilot', domains=None, seeds=None, coefficients=None, overr
     if any(not math.isfinite(c) or c < 0 for c in coefficients):
         raise ValueError('Coefficients must be finite and nonnegative')
     settings = dict(device='cuda', num_train_frames='2000000', num_seed_frames='4000',
-        eval_every_frames='10000', num_eval_episodes='10', use_tb='true', use_wandb='false',
+        eval_every_frames='10000', num_eval_episodes='10', use_tb='true', use_wandb='false' if stage == 'smoke' else 'true',
+        experiment=stage,
         **{'hydra.job.chdir':'true'}, save_snapshot_after_each_task='true',
         num_exposures='2' if stage=='transfer' else '1',
         terminate_after_first_task='false' if stage=='transfer' else 'true',

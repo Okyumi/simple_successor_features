@@ -35,3 +35,31 @@ Other useful overrides: `--set num_train_frames=1000000`, `--set agent.lr_task=0
 Each submission saves its exact grid, per-run commands, environment versions, TensorBoard metrics, JSONL evaluations, and task-end checkpoints under `/scratch/$USER/simple_sf_runs/`. Override `SF_RUNS_DIR` or `SF_CONDA_ENV` if needed; don't change the checkout while its jobs are queued/running, because the launcher checks the submitted commit. Interrupted jobs are not automatically resumed; a new submission starts fresh.
 
 Compare return AUC and final return across seeds, alongside rank99, feature variance, NRC2 alignment, and readout conditioning. Transfer uses four task periods (8M frames per run); pixels are available via `--stage pixels`, but the initial state-based pilot and penultimate-layer intervention are not exact reproductions of the CRL paper's intermediate residual-block setting.
+
+## Weights & Biases
+
+New pilot, confirm, transfer, and pixels grids enable W&B; smoke remains off unless you pass `--set use_wandb=true`. Runs share project `nrc2_successor_features`, are grouped by experiment stage, and identify the domain, seed, coefficient, and regularization target. Return and training diagnostics use environment frames as their chart axes; local JSONL and TensorBoard logs remain enabled.
+
+On the login node, activate the environment and authenticate interactively (never put API keys in scripts):
+
+```bash
+export SF_CONDA_ENV="/scratch/$USER/conda-envs/simple_sfs"
+source hpc/environment.sh
+wandb login
+export WANDB_ENTITY="YOUR_WANDB_USERNAME_OR_TEAM"
+export WANDB_PROJECT="nrc2_successor_features"
+export WANDB_MODE=online
+bash hpc/submit_saadiyat.sh --stage smoke --set use_wandb=true
+# After checking the W&B smoke runs:
+bash hpc/submit_saadiyat.sh --stage pilot
+```
+
+If compute nodes cannot reach W&B, set `WANDB_MODE=offline` before submitting and run `wandb sync /path/to/offline-run-*` from a node with internet after training. Do not change the checkout while existing jobs are queued or running: frozen manifests verify its commit. Existing runs launched with W&B disabled continue writing JSONL and can be imported after the batch finishes, without retraining:
+
+```bash
+# Preview the saved records first; add --upload to send them to W&B.
+python scripts/upload_wandb.py /scratch/$USER/simple_sf_runs/BATCH_DIRECTORY \
+  --entity YOUR_WANDB_USERNAME_OR_TEAM
+```
+
+Only import finished batches. Import preserves logged metrics and their frame values, not historical GPU telemetry. Completed imports are marked and skipped on repeat; an interrupted upload fails on retry rather than silently duplicating history. New code does not retroactively change existing manifests.

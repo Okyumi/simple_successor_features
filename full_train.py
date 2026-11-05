@@ -249,7 +249,9 @@ class Workspace:
                     cfg.agent.name,
                     cfg.domain,
                     cfg.obs_type,
-                    str(cfg.seed),
+                    "s" + str(cfg.seed),
+                    "nrc2_" + str(cfg.agent.get("nrc2_coef", 0)),
+                    str(cfg.agent.get("nrc2_target", "successor")),
                 ]
             )
 
@@ -262,18 +264,19 @@ class Workspace:
             # log wandb_dir_str
             logging.info("wandb_dir_str: %s", wandb_dir_str)
 
-            project_name = "continual_rl" + self.cfg.domain + "_" + self.cfg.mode
             wandb.init(
-                project=project_name,
-                group=cfg.agent.name,
+                project=cfg.wandb_project,
+                entity=cfg.wandb_entity,
+                group=cfg.wandb_group,
                 name=exp_name,
                 config=self._cfg_flatten,
                 dir=wandb_dir_str,
-                mode="offline",
-                settings=wandb.Settings(
-                    start_method="thread"
-                ),  # required for offline mode
+                mode=cfg.wandb_mode,
             )
+
+            for prefix in ("train", "eval"):
+                wandb.define_metric(prefix + "/frame")
+                wandb.define_metric(prefix + "/*", step_metric=prefix + "/frame")
 
         else:
             wandb.init(mode="disabled")
